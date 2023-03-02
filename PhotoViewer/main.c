@@ -22,7 +22,7 @@ static bool findImages(char *** const _files, int * const _files_count){
 		int i, match_i;
 		bool matches = false;
 		char extensions[3][5];
-		strcpy(extensions[0], ".png");
+		strcpy(extensions[0], ".jpg");
 		strcpy(extensions[1], ".jpg");
 		extensions[2][0] = '\0';
 
@@ -95,6 +95,9 @@ static void loadImageNext(GtkWidget *button, gpointer _data){
 	data->ignoreChange = true;
 }
 
+static void deletePicture(GtkWidget* self, struct Data *data){
+	remove(data->files[data->image_index]);
+}
 static void changeName(GtkWidget* self, struct Data *data){
 	if(data->ignoreChange) {
 		data->ignoreChange = false;
@@ -106,10 +109,6 @@ static void changeName(GtkWidget* self, struct Data *data){
 	printf("%s\n", text);	
 	rename(data->files[data->image_index],text);
 	strcpy(data->files[data->image_index], text);
-}
-
-static void onKey(GtkEventControllerKey *self, unsigned int keyval, unsigned int keycode, GdkModifierType, gpointer _data) {
-	g_print("Keyval: %d, Keycode %d\n", keyval, keycode);
 }
 
 static void activate(GApplication *app, gpointer *user_data) {
@@ -170,6 +169,10 @@ static void activate(GApplication *app, gpointer *user_data) {
 	gtk_widget_set_halign(box, GTK_ALIGN_CENTER);
 
 	gtk_box_append(GTK_BOX(box), filename_entry);
+	GtkWidget* button_delete;
+	button_delete = gtk_button_new_with_label("Delete");
+	g_signal_connect(button_delete, "clicked", G_CALLBACK(deletePicture), &data);
+	gtk_box_append(GTK_BOX(box), button_delete);
 
 	GtkWidget *win;
 	win = gtk_window_new();

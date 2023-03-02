@@ -8,8 +8,10 @@ CFLAGS=$(shell pkg-config --cflags gstreamer-1.0 gtk4)
 	-if [ -s log ]; then \
 		cat log | less; \
 	fi 
-	./main 1>log 2>&1 &
-	sleep 0.1 
-	if [ -s log ]; then \
-			cat log | less; \
-	fi \
+	
+
+#./main 1>log 2>&1 &
+#sleep 0.1 
+#if [ -s log ]; then \
+#		cat log | less; \
+#fi \
